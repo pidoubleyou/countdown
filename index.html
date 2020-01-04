@@ -1,0 +1,149 @@
+<!DOCTYPE html UNI>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Countdown</title>
+</head>
+<style>
+    body {
+        background-color: rgba(128, 255, 128);
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    h1 {
+        font-size: 8rem;
+        color: darkgreen;
+        text-align: center;
+    }
+
+    .clock {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    div .column {
+        font-size: 6rem;
+        color: white;
+        border-style: solid;
+        border-width: 50px;
+        border-color: rgba(0, 128, 0);
+        text-align: center;
+        width: 100%;
+    }
+
+    .headline {
+        background-color: rgba(0, 128, 64);
+        margin: 20px;
+    }
+
+    .clockpart {
+        font-size: 15rem;
+        width: 100%;
+        border-radius: 3px;
+        background: rgba(0, 128, 128);
+        margin: 0;
+    }
+
+    :focus {
+        background-color: rgba(128, 255, 192);
+    }
+
+    main > button {
+        font-size: 2rem;
+        background-color: rgba(128, 255, 128);
+        width: 25%;
+    }
+
+    dialog {
+        position: fixed;
+        top: 50px;
+        left: 50px;
+    }
+
+    dialog > button {
+        width: 100%;
+        background-color: rgba(128, 255, 128);
+    }
+</style>
+<script>
+    var countdown = 30;
+
+    function getRemainingTime(endTime) {
+        var diffTime = endTime - Date.parse(new Date());
+
+        var seconds = Math.floor((diffTime / 1000) % 60);
+        var minutes = Math.floor((diffTime / 1000 / 60) % 60);
+        var hours = Math.floor((diffTime / 1000 / 60 / 60) % 60);
+        return {
+            'total': diffTime,
+            'seconds': seconds,
+            'minutes': minutes,
+            'hours': hours
+        };
+    }
+
+    function startCountdown() {
+        var now = new Date();
+        now.setMinutes(now.getMinutes() + countdown);
+        var endTime = Date.parse(now);
+
+        var minutesElement = document.getElementById('minutes');
+        var secondsElement = document.getElementById('seconds');
+
+        var timeinterval = setInterval(function () {
+            var time = getRemainingTime(endTime);
+            minutesElement.innerHTML = formatWithLeadingZero(time.minutes);
+            secondsElement.innerHTML = formatWithLeadingZero(time.seconds);
+
+            if (time.total <= 0) {
+                clearInterval(timeinterval);
+            }
+        }, 1000);
+    }
+
+    function formatWithLeadingZero(value) {
+        return ('0' + value).slice(-2);
+    }
+
+    function openSettings() {
+        document.getElementById("settings").showModal();
+    }
+
+    function closeSettings() {
+        countdown = document.getElementById("settings-minutes").value;
+        document.getElementById("settings").close();
+    }
+</script>
+
+<body>
+    <main>
+        <h1>COUNTDOWN</h1>
+        <div class="clock">
+            <div class="column">
+                <h4 class="headline">Minuten</h4>
+                <p class="clockpart" id="minutes">00</p>
+            </div>
+            <div class="column">
+                <h4 class="headline">Sekunden</h4>
+                <p class="clockpart" id="seconds">00</p>
+            </div>
+        </div>
+        <button type="button" onclick="startCountdown()">Start</button>
+        <button type="button" onclick="openSettings()">Einstellungen</button>
+    </main>
+
+    <dialog id="settings">
+        <h2>Einstellungen</h2>
+        <p>
+            <label for="settings-minutes">Minuten:</label>
+            <input id="settings-minutes" type="number" />
+        </p>
+        <button type="button" onclick="closeSettings()">Übernehmen</button>
+    </dialog>
+</body>
+
+</html>
