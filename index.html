@@ -148,8 +148,8 @@
         <button type="button" onclick="openSettings()">Einstellungen</button>
     </main>
 
-    <dialog id="settings">
-        <h2>Einstellungen</h2>
+    <dialog id="settings" aria-labelledby="dialog-heading">
+        <h2 id="dialog-heading">Einstellungen</h2>
         <p>
             <label for="settings-minutes">Minuten:</label>
             <input id="settings-minutes" type="number" />
