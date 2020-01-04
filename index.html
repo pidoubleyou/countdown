@@ -71,6 +71,7 @@
 </style>
 <script>
     var countdown = 30;
+    var timeInterval;
 
     function getRemainingTime(endTime) {
         var diffTime = endTime - Date.parse(new Date());
@@ -94,13 +95,13 @@
         var minutesElement = document.getElementById('minutes');
         var secondsElement = document.getElementById('seconds');
 
-        var timeinterval = setInterval(function () {
+        timeInterval = setInterval(function () {
             var time = getRemainingTime(endTime);
             minutesElement.innerHTML = formatWithLeadingZero(time.minutes);
             secondsElement.innerHTML = formatWithLeadingZero(time.seconds);
 
             if (time.total <= 0) {
-                clearInterval(timeinterval);
+                clearInterval(timeInterval);
             }
         }, 1000);
     }
@@ -109,13 +110,24 @@
         return ('0' + value).slice(-2);
     }
 
+    function initCountdown() {
+        var minutesElement = document.getElementById('minutes');
+        var secondsElement = document.getElementById('seconds');
+        minutesElement.innerHTML = formatWithLeadingZero(countdown);
+        secondsElement.innerHTML = formatWithLeadingZero(0);
+    }
+
     function openSettings() {
+        if (timeInterval) {
+            clearInterval(timeInterval);
+        }
         document.getElementById("settings").showModal();
     }
 
     function closeSettings() {
-        countdown = document.getElementById("settings-minutes").value;
+        countdown = +(document.getElementById("settings-minutes").value);
         document.getElementById("settings").close();
+        initCountdown();
     }
 </script>
 
