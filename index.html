@@ -102,6 +102,8 @@
 
             if (time.total <= 0) {
                 clearInterval(timeInterval);
+                var audio = new Audio('fanfare.mp3');
+                audio.play();
             }
         }, 1000);
     }
